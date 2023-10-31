@@ -14,7 +14,7 @@ def index():
     ]
     
     joke_index = random.randint(0, len(jokes))
-    return render_template('index.html', joke=jokes[joke_index])
+    joke_index = random.randint(0, len(jokes) - 1)
 
 if __name__ == '__main__':
     app.run(debug=True)
