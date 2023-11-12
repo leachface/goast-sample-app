@@ -13,8 +13,9 @@ def index():
         "Why did the golfer bring two pairs of pants? In case he got a hole in one!"
     ]
     
-    joke_index = random.randint(0, len(jokes))
+    # Generate a random index within the range of available jokes to avoid IndexError
+    joke_index = random.randint(0, len(jokes) - 1)
     return render_template('index.html', joke=jokes[joke_index])
-
 if __name__ == '__main__':
-    app.run(debug=True)
+# Ensure to test the application locally to confirm that all changes work as expected before deploying to production
+<copy-original start-inclusive=23 end-inclusive=23>
