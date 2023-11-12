@@ -15,14 +15,15 @@ app.get('/users', (req, res) => {
 });
 
 app.put('/users/:id', (req, res) => {
-    const userIndex = users.findIndex(u => u.id === req.params.id);
-
-    users[userIndex].name = req.body.name;
-    users[userIndex].age = req.body.age;
-
+    if (req.headers['content-type'] !== 'application/json') {
+        return res.status(400).send({ error: 'Bad Request: Content-Type must be application/json' });
+    }
+    const userId = parseInt(req.params.id, 10);
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) {
+        return res.status(404).send({ error: 'User not found' });
+    }
+    const user = users[userIndex];
+    user.age = req.body.age;
     res.json(users[userIndex]);
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
 });
