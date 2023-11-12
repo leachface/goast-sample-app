@@ -15,8 +15,11 @@ app.get('/users', (req, res) => {
 });
 
 app.put('/users/:id', (req, res) => {
-    const userIndex = users.findIndex(u => u.id === req.params.id);
-
+    const userIndex = users.findIndex(u => u.id === parseInt(req.params.id));
+    if (userIndex === -1) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+    }
     users[userIndex].name = req.body.name;
     users[userIndex].age = req.body.age;
 
@@ -25,4 +28,8 @@ app.put('/users/:id', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+});
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('An error occurred');
 });
