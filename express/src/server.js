@@ -10,19 +10,24 @@ let users = [
 
 app.use(express.json());
 
+app.put('/users/:id', (req, res) => {
+    try {
+        const userId = parseInt(req.params.id, 10);
+        const userIndex = users.findIndex(u => u.id === userId);
+        if (userIndex === -1) {
+            return res.status(404).send('User not found');
+        }
+        // Ensure that the user object exists before setting properties
+        if (!users[userIndex]) {
+            return res.status(404).send('User not found');
+        }
+        users[userIndex].name = req.body.name;
+        users[userIndex].age = req.body.age;
+        res.json(users[userIndex]);
+    } catch (error) {
+        res.status(500).send('An error occurred while updating the user');
+    }
+});
 app.get('/users', (req, res) => {
     res.json(users);
-});
-
-app.put('/users/:id', (req, res) => {
-    const userIndex = users.findIndex(u => u.id === req.params.id);
-
-    users[userIndex].name = req.body.name;
-    users[userIndex].age = req.body.age;
-
-    res.json(users[userIndex]);
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
 });
